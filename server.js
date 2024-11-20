@@ -5,23 +5,32 @@ const app = express();
 
 const PORT = 3000;
 
-app.use(express.urlencoded({ extended : true})); 
+// Habilitar el uso de archivos estáticos
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-//definir la ruta para servir el archivo html
-app.get('/',(req,res) => {
-    //envia el archivo formulario.html al cliente
-    res.sendFile(path.join(__dirname, 'form.html'))//
+app.use(express.urlencoded({ extended: true }));
+
+// Ruta para servir el formulario HTML
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'formulario.html')); // Cambié el nombre al archivo HTML
 });
 
-//define la ruta para procesar el envio del formulario
+// Ruta para procesar el envío del formulario
 app.post('/registro', (req, res) => {
-    //accede a los datos enviados en el formulario
     const datosRegistro = req.body;
-    console.log("datos recibidos ",datosRegistro);
-    const {nombre_completo, edad, email, curso} = datosRegistro
-    res.send(`<h1>Se completo el registro</h1> <p>Se regitro al usuario</p> <br> <br> <p>Nombre: ${nombre_completo}</p> <p>Edad: ${edad}</p> <p>Correo electronico: ${email}</p> <p>Curso: ${curso}</p>` );
+    console.log("Datos recibidos:", datosRegistro);
+    const { nombre_completo, edad, email, curso } = datosRegistro;
+    res.send(`
+        <h1>Se completó el registro</h1>
+        <p>Se registró al usuario con la siguiente información:</p>
+        <p><strong>Nombre:</strong> ${nombre_completo}</p>
+        <p><strong>Edad:</strong> ${edad}</p>
+        <p><strong>Correo electrónico:</strong> ${email}</p>
+        <p><strong>Curso:</strong> ${curso}</p>
+    `);
 });
 
+// Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`servidor funcionando en http://localhost:${PORT}`);
+    console.log(`Servidor funcionando en http://localhost:3000`);
 });
